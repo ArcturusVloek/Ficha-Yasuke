@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yasuke Kuro — Ficha de Personagem</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f0ebe0;
+    --paper-dark: #e8e0cc;
+    --red: #8b1a1a;
+    --red-light: #c0392b;
+    --gold: #b8860b;
+    --gold-light: #d4a017;
+    --muted: #5a4a3a;
+    --muted-light: #7a6a5a;
+    --border: rgba(139,26,26,0.3);
+    --shadow: rgba(10,10,15,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1008;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(139,26,26,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(184,134,11,0.06) 0%, transparent 60%);
+    font-family: 'Crimson Pro', Georgia, serif;
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    background: var(--paper);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    border: 1px solid var(--border);
+    box-shadow: 0 0 80px rgba(0,0,0,0.6), inset 0 0 120px rgba(184,134,11,0.04);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Corner ornaments */
+  .page::before, .page::after {
+    content: '';
+    position: absolute;
+    width: 80px; height: 80px;
+    border-color: var(--gold);
+    border-style: solid;
+    opacity: 0.4;
+    z-index: 1;
+  }
+  .page::before { top: 16px; left: 16px; border-width: 2px 0 0 2px; }
+  .page::after  { bottom: 16px; right: 16px; border-width: 0 2px 2px 0; }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 3rem 3rem 2rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    text-align: center;
+  }
+
+  .header-kanji {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 4.5rem;
+    font-weight: 300;
+    color: var(--red);
+    opacity: 0.12;
+    position: absolute;
+    top: 1rem; right: 2.5rem;
+    letter-spacing: -0.1em;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .rank-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 4px 16px;
+    margin-bottom: 1rem;
+  }
+
+  .npc-name {
+    font-family: 'Cinzel', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: 0.08em;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .npc-subtitle {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 1.5rem;
+  }
+
+  .header-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+  .header-divider span { font-size: 1.2rem; color: var(--red); opacity: 0.6; }
+  .header-divider hr { flex: 1; border: none; border-top: 1px solid var(--border); max-width: 120px; }
+
+  /* ── BODY LAYOUT ── */
+  .body { padding: 2.5rem 3rem; }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.2rem;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border), transparent);
+  }
+
+  /* ── POWER CARDS ── */
+  .power-grid { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem; }
+
+  .power-card {
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.35);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .power-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+  .power-card.shikai-1::before { background: #6b93b0; }
+  .power-card.shikai-2::before { background: var(--red-light); }
+  .power-card.bankai-1::before { background: #2c2c2a; }
+  .power-card.bankai-2::before { background: #5a7a5a; }
+  .power-card.res-1::before   { background: var(--gold); }
+  .power-card.res-2::before   { background: #4a7a4a; }
+  .power-card.res-3::before   { background: #7a4a7a; }
+
+  .power-header {
+    padding: 0.9rem 1.2rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .power-title-block { flex: 1; }
+
+  .power-form-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted-light);
+    margin-bottom: 3px;
+  }
+
+  .power-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .power-name-jp {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  .power-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: flex-end;
+    flex-shrink: 0;
+  }
+
+  .pbadge {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+    text-transform: uppercase;
+  }
+  .pbadge.sonic   { color: #5a7a9a; border-color: #5a7a9a; }
+  .pbadge.dark    { color: #4a4a5a; border-color: #4a4a5a; }
+  .pbadge.gold    { color: var(--gold); border-color: var(--gold); }
+  .pbadge.red     { color: var(--red); border-color: var(--red); }
+  .pbadge.green   { color: #4a7a4a; border-color: #4a7a4a; }
+  .pbadge.purple  { color: #6a4a8a; border-color: #6a4a8a; }
+  .pbadge.gray    { color: var(--muted); border-color: var(--muted); }
+
+  /* stats row */
+  .power-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pstat {
+    padding: 0.6rem 0.8rem;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+  .pstat:last-child { border-right: none; }
+
+  .pstat-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted-light);
+    margin-bottom: 3px;
+  }
+
+  .pstat-val {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .pstat-sub {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* body */
+  .power-body { padding: 1rem 1.2rem; }
+
+  .comp-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 3px 0;
+    border-bottom: 1px dotted rgba(139,26,26,0.15);
+    gap: 1rem;
+    font-size: 0.85rem;
+  }
+  .comp-row:last-child { border-bottom: none; }
+  .comp-label { color: var(--muted); flex: 1; }
+  .comp-val { color: var(--ink); font-weight: 400; white-space: nowrap; }
+  .comp-neg { color: #4a7a4a; font-weight: 400; white-space: nowrap; }
+
+  .math-line {
+    margin-top: 0.8rem;
+    padding: 6px 10px;
+    background: rgba(139,26,26,0.06);
+    border-left: 2px solid var(--red);
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .math-line strong { color: var(--ink); }
+
+  .note-box {
+    margin-top: 0.8rem;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    background: rgba(184,134,11,0.05);
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .note-box strong {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .dark-note {
+    margin-top: 0.8rem;
+    padding: 8px 12px;
+    background: rgba(10,10,15,0.08);
+    border-left: 2px solid #2c2c2a;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .dark-note strong {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #2c2c2a;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .flavor-line {
+    margin-top: 0.9rem;
+    padding-left: 12px;
+    border-left: 2px solid var(--gold);
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── SECTION SPACING ── */
+  .section-block { margin-bottom: 2.5rem; }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 1.5rem 3rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-left {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--muted-light);
+    text-transform: uppercase;
+  }
+
+  .footer-kanji {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--red);
+    opacity: 0.3;
+  }
+
+  /* ── HORIZONTAL RULE between sections ── */
+  .hr-ornament {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  .hr-ornament hr { flex: 1; border: none; border-top: 1px solid var(--border); }
+  .hr-ornament span {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.9rem;
+    color: var(--red);
+    opacity: 0.5;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .body { padding: 1.5rem 1.2rem; }
+    .header { padding: 2rem 1.5rem 1.5rem; }
+    .npc-name { font-size: 2rem; }
+    .power-stats { grid-template-columns: repeat(2, 1fr); }
+    .footer { padding: 1rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- KANJI BG -->
+  <div class="header-kanji">黒</div>
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="rank-badge">Franqueador · NP 9 · Adrenalina · Êxodos</div>
+    <h1 class="npc-name">Yasuke Kuro</h1>
+    <p class="npc-subtitle">安介黒 · 27 anos · 2,00m · 80kg · Aparência: Kaname Tōsen</p>
+    <div class="header-divider">
+      <hr>
+      <span>⬥</span>
+      <span style="font-family:'Noto Serif JP';font-size:0.8rem;color:var(--muted);letter-spacing:0.15em">Zanpakutō · Suzumushi</span>
+      <span>⬥</span>
+      <hr>
+    </div>
+
+    <!-- STATS BLOCK -->
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:1.5rem;">
+      <div style="text-align:center;padding:10px 6px;border:1px solid var(--border);background:rgba(139,26,26,0.06);">
+        <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.2em;color:var(--red);text-transform:uppercase;margin-bottom:4px;">HP</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900;color:var(--ink);">170</div>
+        <div style="font-size:0.65rem;color:var(--muted);">CON×5+NP×10+20</div>
+      </div>
+      <div style="text-align:center;padding:10px 6px;border:1px solid var(--border);background:rgba(184,134,11,0.06);">
+        <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:4px;">MP</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900;color:var(--ink);">135</div>
+        <div style="font-size:0.65rem;color:var(--muted);">INT×5+NP×5+15</div>
+      </div>
+      <div style="text-align:center;padding:10px 6px;border:1px solid var(--border);background:rgba(255,255,255,0.3);">
+        <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.2em;color:var(--muted-light);text-transform:uppercase;margin-bottom:4px;">CA</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900;color:var(--ink);">14</div>
+        <div style="font-size:0.65rem;color:var(--muted);">10+Mod.AGI</div>
+      </div>
+      <div style="text-align:center;padding:10px 6px;border:1px solid var(--border);background:rgba(255,255,255,0.3);">
+        <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.2em;color:var(--muted-light);text-transform:uppercase;margin-bottom:4px;">RD</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900;color:var(--ink);">+1</div>
+        <div style="font-size:0.65rem;color:var(--muted);">Mod.CON</div>
+      </div>
+      <div style="text-align:center;padding:10px 6px;border:1px solid var(--border);background:rgba(255,255,255,0.3);">
+        <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.2em;color:var(--muted-light);text-transform:uppercase;margin-bottom:4px;">INIT.</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900;color:var(--ink);">+4</div>
+        <div style="font-size:0.65rem;color:var(--muted);">1d20+Mod.AGI</div>
+      </div>
+      <div style="text-align:center;padding:10px 6px;border:1px solid var(--border);background:rgba(255,255,255,0.3);">
+        <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.2em;color:var(--muted-light);text-transform:uppercase;margin-bottom:4px;">DESLOC.</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900;color:var(--ink);">9m</div>
+        <div style="font-size:0.65rem;color:var(--muted);">base</div>
+      </div>
+    </div>
+
+    <!-- ATRIBUTOS -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px;">
+      <div style="text-align:center;padding:8px 6px;border:1px solid var(--border);background:rgba(255,255,255,0.2);">
+        <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.15em;color:var(--muted-light);text-transform:uppercase;margin-bottom:2px;">FOR</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600;color:var(--ink);">12</div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:500;">+1</div>
+      </div>
+      <div style="text-align:center;padding:8px 6px;border:1px solid var(--border);background:rgba(255,255,255,0.2);">
+        <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.15em;color:var(--muted-light);text-transform:uppercase;margin-bottom:2px;">AGI</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600;color:var(--ink);">18</div>
+        <div style="font-size:0.7rem;color:var(--red);font-weight:500;">+4</div>
+      </div>
+      <div style="text-align:center;padding:8px 6px;border:1px solid var(--border);background:rgba(255,255,255,0.2);">
+        <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.15em;color:var(--muted-light);text-transform:uppercase;margin-bottom:2px;">CON</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600;color:var(--ink);">12</div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:500;">+1</div>
+      </div>
+      <div style="text-align:center;padding:8px 6px;border:1px solid var(--border);background:rgba(255,255,255,0.2);">
+        <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.15em;color:var(--muted-light);text-transform:uppercase;margin-bottom:2px;">INT</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600;color:var(--ink);">15</div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:500;">+2</div>
+      </div>
+      <div style="text-align:center;padding:8px 6px;border:1px solid var(--border);background:rgba(255,255,255,0.2);">
+        <div style="font-family:'Cinzel',serif;font-size:0.5rem;letter-spacing:0.15em;color:var(--muted-light);text-transform:uppercase;margin-bottom:2px;">SAB</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:600;color:var(--ink);">14</div>
+        <div style="font-size:0.7rem;color:var(--muted);font-weight:500;">+2</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BODY ── -->
+  <div class="body">
+
+    <!-- ══ SHIKAI ══ -->
+    <div class="section-block">
+      <div class="section-title">Shikai — Suzumushi · 清虫</div>
+      <div class="power-grid">
+
+        <!-- SHIKAI 1: CHORAR -->
+        <div class="power-card shikai-1">
+          <div class="power-header">
+            <div class="power-title-block">
+              <div class="power-form-tag">Shikai · 1ª Forma · Comando de Liberação</div>
+              <div class="power-name">Suzumushi — Chorar</div>
+              <div class="power-name-jp">鳴け · Tom que Derruba Sem Sangrar</div>
+            </div>
+            <div class="power-badges">
+              <span class="pbadge sonic">Ofensivo</span>
+              <span class="pbadge sonic">[Sônico]</span>
+              <span class="pbadge gray">Área · Sustentado</span>
+            </div>
+          </div>
+          <div class="power-stats">
+            <div class="pstat">
+              <div class="pstat-label">Dano</div>
+              <div class="pstat-val">3d8</div>
+              <div class="pstat-sub">sônico</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Área</div>
+              <div class="pstat-val">Raio 9m</div>
+              <div class="pstat-sub">aura pessoal</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo MP</div>
+              <div class="pstat-val">27 MP</div>
+              <div class="pstat-sub">por ativação</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo PE</div>
+              <div class="pstat-val">80 PE</div>
+              <div class="pstat-sub">limite NP</div>
+            </div>
+          </div>
+          <div class="power-body">
+            <div class="comp-row"><span class="comp-label">Núcleo — 3d8 Sônico (Atordoamento CD 15 incluso)</span><span class="comp-val">6 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Alcance — Aura pessoal (move com usuário)</span><span class="comp-val">2 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Área — Explosão raio 9m (base + 7 expansões)</span><span class="comp-val">16 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Duração — Sustentado (MP/turno)</span><span class="comp-val">10 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Status — Atordoado (perde ação)</span><span class="comp-val">4 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Status — Paralisia (CD 15)</span><span class="comp-val">10 PE</span></div>
+            <div class="comp-row"><span class="comp-label">+5 na CD de todos os status</span><span class="comp-val">10 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Descritor [Mental] +4</span><span class="comp-val">4 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Preparação: 1 turno de vibração</span><span class="comp-neg">−5 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Afeta aliados também</span><span class="comp-neg">−3 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Sem velocidade de reação</span><span class="comp-neg">−4 PE</span></div>
+            <div class="math-line">6+2+16+10+4+10+10+4 = 62 · limitações −12 · <strong>Total: 80 PE · 27 MP</strong></div>
+            <div class="note-box">
+              <strong>Como usar em combate</strong>
+              Turno 1 — vibra a lâmina (preparação). Turno 2 — ativa "Chorar": tom agudo expande em raio de 9m. Todos fazem CON ou AGI CD 20 (o maior) ou ficam Atordoados. Se já Atordoados: Paralisia CD 20 por 1d4 turnos. Sustentado — reaplicado a cada turno enquanto MP for gasto.
+            </div>
+            <div class="flavor-line">"Não é crueldade — é misericórdia com frequência. O som entra, os joelhos dobram, e ninguém precisa sangrar."</div>
+          </div>
+        </div>
+
+        <!-- SHIKAI 2: BENIHIKO -->
+        <div class="power-card shikai-2">
+          <div class="power-header">
+            <div class="power-title-block">
+              <div class="power-form-tag">Shikai · 2ª Forma · Benihikō</div>
+              <div class="power-name">Suzumushi Nishiki — Gafanhotos Escarlates</div>
+              <div class="power-name-jp">清虫二式紅飛蝗 · Chuva de Lâminas em Semicírculo</div>
+            </div>
+            <div class="power-badges">
+              <span class="pbadge red">Ofensivo</span>
+              <span class="pbadge gray">[Físico]</span>
+              <span class="pbadge red">Cone · Instantâneo</span>
+            </div>
+          </div>
+          <div class="power-stats">
+            <div class="pstat">
+              <div class="pstat-label">Dano</div>
+              <div class="pstat-val">6d8</div>
+              <div class="pstat-sub">cinético</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Área</div>
+              <div class="pstat-val">Cone 9m</div>
+              <div class="pstat-sub">semicírculo</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo MP</div>
+              <div class="pstat-val">27 MP</div>
+              <div class="pstat-sub">por ativação</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo PE</div>
+              <div class="pstat-val">80 PE</div>
+              <div class="pstat-sub">limite NP</div>
+            </div>
+          </div>
+          <div class="power-body">
+            <div class="comp-row"><span class="comp-label">Núcleo — 6d8 Cinético (corte)</span><span class="comp-val">6 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Alcance — Médio (30m)</span><span class="comp-val">5 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Área — Cone 9m</span><span class="comp-val">6 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Precisão — +3 no acerto</span><span class="comp-val">3 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Ignorar 4 pontos de RD</span><span class="comp-val">8 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Status — Sangramento (CD 18)</span><span class="comp-val">3 PE</span></div>
+            <div class="comp-row"><span class="comp-label">+3 na CD de resistência ao Sangramento</span><span class="comp-val">6 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Descritor [Energético]</span><span class="comp-val">2 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Gatilho — HP abaixo de 50%: +50% dano</span><span class="comp-val">4 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Preparação: 1 turno (movimento semicírculo)</span><span class="comp-neg">−5 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Pós-uso: exaustão (1 turno)</span><span class="comp-neg">−8 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Afeta aliados no cone</span><span class="comp-neg">−3 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Uso único por missão</span><span class="comp-neg">−12 PE</span></div>
+            <div class="math-line">6+5+6+3+8+3+6+2+4 = 43 · limitações −28 · gatilho +4 · <strong>Total: 19 PE → escalado 80 PE · 27 MP</strong></div>
+            <div class="note-box">
+              <strong>Combo tático com Chorar</strong>
+              Chorar paralisa o grupo. Benihikō é usado na sequência — alvos imobilizados não podem esquivar. O semicírculo direcional permite poupar um aliado atrás do usuário.
+            </div>
+            <div class="flavor-line">"A espada traça um arco e o ar se parte. O que eram lâminas de luz viram chuva de aço — e tudo que estava na frente entende, tarde demais."</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="hr-ornament"><hr><span>⬦</span><hr></div>
+
+    <!-- ══ BANKAI ══ -->
+    <div class="section-block">
+      <div class="section-title">Bankai — Enma Kōrogi · 清虫終式閻魔蟋蟀</div>
+      <div class="power-grid">
+
+        <!-- BANKAI 1: A TENDA -->
+        <div class="power-card bankai-1">
+          <div class="power-header">
+            <div class="power-title-block">
+              <div class="power-form-tag">Bankai · Poder 1 de 2 · Dominância de Campo</div>
+              <div class="power-name">Enma Kōrogi — A Tenda</div>
+              <div class="power-name-jp">Jardim do Silêncio · Esfera que Nega os Sentidos</div>
+            </div>
+            <div class="power-badges">
+              <span class="pbadge dark">Bankai</span>
+              <span class="pbadge dark">[Trevas]</span>
+              <span class="pbadge purple">[Mental]</span>
+            </div>
+          </div>
+          <div class="power-stats">
+            <div class="pstat">
+              <div class="pstat-label">Área</div>
+              <div class="pstat-val">Raio 30m</div>
+              <div class="pstat-sub">esfera total</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Sentidos negados</div>
+              <div class="pstat-val">5 de 5</div>
+              <div class="pstat-sub">só toque resta</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo MP</div>
+              <div class="pstat-val">27 MP</div>
+              <div class="pstat-sub">+ sustento/turno</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo PE</div>
+              <div class="pstat-val">80 PE</div>
+              <div class="pstat-sub">limite NP</div>
+            </div>
+          </div>
+          <div class="power-body">
+            <div class="comp-row"><span class="comp-label">Núcleo — 1d8 Psíquico (base)</span><span class="comp-val">2 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Alcance — Aura pessoal</span><span class="comp-val">2 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Área — Explosão raio 30m (base + 14 expansões)</span><span class="comp-val">30 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Duração — Sustentado</span><span class="comp-val">10 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Status — Cegueira · Silêncio · Confusão · Exaustão</span><span class="comp-val">20 PE</span></div>
+            <div class="comp-row"><span class="comp-label">+5 na CD de todos os status</span><span class="comp-val">10 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Descritor [Mental] +4</span><span class="comp-val">4 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Preparação: 1 turno (girar os anéis)</span><span class="comp-neg">−5 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Usuário não pode usar técnicas especiais</span><span class="comp-neg">−8 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Destruído com dano grave (30%+ HP/turno)</span><span class="comp-neg">−8 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Afeta aliados dentro da área</span><span class="comp-neg">−3 PE</span></div>
+            <div class="math-line">2+2+30+10+20+10+4 = 78 · limitações −24 · <strong>Total: 54 PE → escalado 80 PE · 27 MP</strong></div>
+            <div class="dark-note">
+              <strong>Efeitos dentro da Tenda</strong>
+              Cegueira — falha automática à distância; corpo a corpo com desvantagem.<br>
+              Silêncio — sem comunicação nem habilidades verbais.<br>
+              Confusão — SAB CD 20/turno ou ataca aleatoriamente (1d6).<br>
+              Exaustão — deslocamento ÷2; desvantagem em testes físicos.<br>
+              Único sentido preservado: o toque. Combate ainda é possível — às cegas.
+            </div>
+            <div class="note-box">
+              <strong>Condição de colapso</strong>
+              Se Yasuke receber 30% ou mais do HP máximo em um único turno, a Tenda colapsa imediatamente. Esta é a única saída confiável — o grupo deve coordenar dano maciço em um único turno.
+            </div>
+            <div class="flavor-line">"Nove anéis. Um silêncio. O mundo dentro da tenda não tem cor, não tem som, não tem cheiro. Só tem a sensação fria do aço — se você conseguir encontrá-lo."</div>
+          </div>
+        </div>
+
+        <!-- BANKAI 2: IMUNIDADE -->
+        <div class="power-card bankai-2">
+          <div class="power-header">
+            <div class="power-title-block">
+              <div class="power-form-tag">Bankai · Poder 2 de 2 · Passivo Condicional</div>
+              <div class="power-name">Suzumushi — Imunidade do Portador</div>
+              <div class="power-name-jp">Quem Segura a Espada Herda o Direito de Ver</div>
+            </div>
+            <div class="power-badges">
+              <span class="pbadge green">Passivo</span>
+              <span class="pbadge green">Suporte</span>
+              <span class="pbadge gray">Condicional</span>
+            </div>
+          </div>
+          <div class="power-stats">
+            <div class="pstat">
+              <div class="pstat-label">Tipo</div>
+              <div class="pstat-val">Passivo</div>
+              <div class="pstat-sub">sempre ativo</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Alvo</div>
+              <div class="pstat-val">Portador</div>
+              <div class="pstat-sub">quem segura</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo MP</div>
+              <div class="pstat-val">0 MP</div>
+              <div class="pstat-sub">passivo</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo PE</div>
+              <div class="pstat-val">80 PE</div>
+              <div class="pstat-sub">limite NP</div>
+            </div>
+          </div>
+          <div class="power-body">
+            <div class="comp-row"><span class="comp-label">Imunidade a status: Cegueira · Silêncio · Confusão · Exaustão</span><span class="comp-val">32 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Sentido Expandido — detecta tudo em 30m por vibração sônica</span><span class="comp-val">5 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Imunidade elemental: [Trevas]</span><span class="comp-val">20 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Imunidade elemental: [Mental]</span><span class="comp-val">20 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Requer a espada em mãos</span><span class="comp-neg">−5 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Transferível: inimigo que tocar a espada também fica imune</span><span class="comp-neg">−12 PE</span></div>
+            <div class="math-line">32+5+20+20 = 77 · limitações −17 · <strong>Total: 60 PE → escalado 80 PE</strong></div>
+            <div class="note-box">
+              <strong>A regra do toque na espada</strong>
+              Qualquer pessoa que segure Suzumushi — incluindo um oponente que a arranque ou toque em combate — fica completamente imune aos efeitos da Tenda enquanto o contato durar. Um oponente esperto que consiga agarrar a lâmina neutraliza o Bankai inteiro sem precisar derrotar o usuário.
+            </div>
+            <div class="flavor-line">"A espada conhece o dono. Mas aço não tem lealdade — e quem segurar a lâmina herda o direito de ver."</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="hr-ornament"><hr><span>⬦</span><hr></div>
+
+    <!-- ══ RESSURREIÇÃO ══ -->
+    <div class="section-block">
+      <div class="section-title">Ressurreição — Grillar Grillo · 狂枷蟋蟀</div>
+      <div class="power-grid">
+
+        <!-- RES 1: TRANSFORMAÇÃO -->
+        <div class="power-card res-1">
+          <div class="power-header">
+            <div class="power-title-block">
+              <div class="power-form-tag">Ressurreição · Poder 1 de 3 · Forma Completa</div>
+              <div class="power-name">Grillar Grillo — Forma Ressurrecta</div>
+              <div class="power-name-jp">Suzumushi Hyakushiki · 清虫百式 · Grilo Gigante de Quatro Braços</div>
+            </div>
+            <div class="power-badges">
+              <span class="pbadge gold">Ressurreição</span>
+              <span class="pbadge gray">Transformação</span>
+            </div>
+          </div>
+          <div class="power-stats">
+            <div class="pstat">
+              <div class="pstat-label">FOR / CON</div>
+              <div class="pstat-val">+6 / +4</div>
+              <div class="pstat-sub">garras + Hierro</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">AGI / SAB</div>
+              <div class="pstat-val">+5 / +4</div>
+              <div class="pstat-sub">asas + visão</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Manutenção</div>
+              <div class="pstat-val">15 MP</div>
+              <div class="pstat-sub">por turno</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo PE</div>
+              <div class="pstat-val">150 PE</div>
+              <div class="pstat-sub">além do limite NP</div>
+            </div>
+          </div>
+          <div class="power-body">
+            <div class="comp-row"><span class="comp-label">+6 FOR (garras, força bruta)</span><span class="comp-val">18 PE + 12 MP/turno</span></div>
+            <div class="comp-row"><span class="comp-label">+4 CON (Hierro — absorção física)</span><span class="comp-val">12 PE + 8 MP/turno</span></div>
+            <div class="comp-row"><span class="comp-label">+5 AGI (velocidade sônica, asas)</span><span class="comp-val">15 PE + 10 MP/turno</span></div>
+            <div class="comp-row"><span class="comp-label">+4 SAB (visão adquirida, sentido sônico)</span><span class="comp-val">12 PE + 8 MP/turno</span></div>
+            <div class="comp-row"><span class="comp-label">Voo — quatro asas de inseto</span><span class="comp-val">8 PE</span></div>
+            <div class="comp-row"><span class="comp-label">RD permanente +4 (Hierro)</span><span class="comp-val">24 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Passivo — Sentido Expandido (vibração sônica 30m)</span><span class="comp-val">5 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Passivo — Imunidade a Cegueira (visão adquirida)</span><span class="comp-val">8 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Preparação: 1 turno de invocação</span><span class="comp-neg">−5 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Pós-expiração: 2 turnos inconsciente</span><span class="comp-neg">incluso</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Surpresa ao ver: −2 SAB no turno de ativação</span><span class="comp-neg">−3 PE</span></div>
+            <div class="math-line">18+12+15+12+8+24+5+8 = 102 · limitações −8 · manutenção 38 MP/turno → <strong>150 PE · 15 MP manutenção</strong></div>
+            <div class="dark-note">
+              <strong>Estado da Ressurreição</strong>
+              Corpo de grilo gigante — quatro braços com garras, quatro asas, dois olhos compostos.<br>
+              FOR +6 → golpes capazes de parar katanas de Bankai com uma mão.<br>
+              CON +4 + RD +4 → Hierro: absorve impactos que paralisariam qualquer humano.<br>
+              AGI +5 → velocidade que torna esquiva quase impossível de acompanhar.<br>
+              SAB +4 → visão completa pela primeira vez. Sentido sônico ampliado em 30m.<br>
+              Detalhe canônico: no turno de ativação, −2 SAB por dissonância — o cérebro demora um turno para processar a visão.
+            </div>
+            <div class="flavor-line">"Pela primeira vez na vida, ele viu. E o mundo era exatamente tão cruel quanto havia imaginado."</div>
+          </div>
+        </div>
+
+        <!-- RES 2: REGENERAÇÃO -->
+        <div class="power-card res-2">
+          <div class="power-header">
+            <div class="power-title-block">
+              <div class="power-form-tag">Ressurreição · Poder 2 de 3 · Passivo</div>
+              <div class="power-name">Regeneração Instantânea</div>
+              <div class="power-name-jp">Ferimentos Fecham Antes que o Sangue Chegue ao Chão</div>
+            </div>
+            <div class="power-badges">
+              <span class="pbadge green">Passivo</span>
+              <span class="pbadge green">Regeneração</span>
+            </div>
+          </div>
+          <div class="power-stats">
+            <div class="pstat">
+              <div class="pstat-label">Regen. combate</div>
+              <div class="pstat-val">10 HP</div>
+              <div class="pstat-sub">por turno</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Regen. fora</div>
+              <div class="pstat-val">20 HP</div>
+              <div class="pstat-sub">por turno</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo MP</div>
+              <div class="pstat-val">0 MP</div>
+              <div class="pstat-sub">passivo</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo PE</div>
+              <div class="pstat-val">80 PE</div>
+              <div class="pstat-sub">limite NP</div>
+            </div>
+          </div>
+          <div class="power-body">
+            <div class="comp-row"><span class="comp-label">Regeneração HP fora de combate (20 HP/turno)</span><span class="comp-val">24 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Regeneração em combate (10 HP/turno)</span><span class="comp-val">14+24 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Imunidade a status: Sangramento</span><span class="comp-val">8 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Imunidade a status: Envenenado</span><span class="comp-val">8 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Só ativo durante a Ressurreição</span><span class="comp-neg">−5 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Para se dano for [Divino] ou [Absoluto]</span><span class="comp-neg">−3 PE</span></div>
+            <div class="math-line">24+38+8+8 = 78 · limitações −8 · <strong>Total: 70 PE → escalado 80 PE</strong></div>
+            <div class="flavor-line">"Komamura o cortou três vezes. As três vezes, a carne fechou antes que o sangue chegasse ao chão."</div>
+          </div>
+        </div>
+
+        <!-- RES 3: LOS NUEVE ASPECTOS -->
+        <div class="power-card res-3">
+          <div class="power-header">
+            <div class="power-title-block">
+              <div class="power-form-tag">Ressurreição · Poder 3 de 3 · Finalizador</div>
+              <div class="power-name">Los Nueve Aspectos</div>
+              <div class="power-name-jp">九相輪殺 · Pagode dos Nove Finalizadores do Massacre</div>
+            </div>
+            <div class="power-badges">
+              <span class="pbadge red">Ofensivo</span>
+              <span class="pbadge sonic">[Sônico]</span>
+              <span class="pbadge purple">Finalizador</span>
+            </div>
+          </div>
+          <div class="power-stats">
+            <div class="pstat">
+              <div class="pstat-label">Dano</div>
+              <div class="pstat-val">9d10</div>
+              <div class="pstat-sub">sônico</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Alcance</div>
+              <div class="pstat-val">30m</div>
+              <div class="pstat-sub">médio</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo MP</div>
+              <div class="pstat-val">50 MP</div>
+              <div class="pstat-sub">por ativação</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-label">Custo PE</div>
+              <div class="pstat-val">150 PE</div>
+              <div class="pstat-sub">além do limite NP</div>
+            </div>
+          </div>
+          <div class="power-body">
+            <div class="comp-row"><span class="comp-label">Núcleo — 9d8 Sônico</span><span class="comp-val">18 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Alcance — Médio (30m)</span><span class="comp-val">5 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Área — Explosão raio 6m</span><span class="comp-val">8 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Precisão — +4 no acerto</span><span class="comp-val">4 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Ignorar 6 RD (atravessa Hierro e barreiras)</span><span class="comp-val">12 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Status — Atordoado + Sangramento Grave</span><span class="comp-val">7 PE</span></div>
+            <div class="comp-row"><span class="comp-label">+5 na CD dos status</span><span class="comp-val">10 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Descritor [Energético]</span><span class="comp-val">2 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Gatilho — HP acima de 50%: +50% dano</span><span class="comp-val">3 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Preparação: 1 turno (traçar círculos com as garras)</span><span class="comp-neg">−5 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Uso único por missão</span><span class="comp-neg">−12 PE</span></div>
+            <div class="comp-row"><span class="comp-label">Limitação — Só pode ser usado durante a Ressurreição</span><span class="comp-neg">−5 PE</span></div>
+            <div class="math-line">18+5+8+4+12+7+10+2+3 = 69 · limitações −22 · gatilho +3 · <strong>Total: 50 PE → escalado 150 PE · 50 MP</strong></div>
+            <div class="note-box">
+              <strong>Como usar Los Nueve Aspectos</strong>
+              Turno 1 — Yasuke traça nove círculos no ar com as quatro garras simultaneamente. Silêncio absoluto. Turno 2 — impacto sônico massivo em raio de 6m. 9d10 sônico que ignora 6 de RD. Alvos fazem CON ou AGI CD 20 ou ficam Atordoados + Sangramento Grave. Com HP acima de 50%, dano escala para 13d10.
+            </div>
+            <div class="flavor-line">"Nove gestos. Nove círculos. Um único som que não é som — é o fim de tudo que estava na frente."</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="footer-left">
+      Programa Êxodos · Academia Central · Ficha de Personagem<br>
+      Yasuke Kuro · Franqueador NP 9 · Adrenalina · Zanpakutō: Suzumushi
+    </div>
+    <div class="footer-kanji">黒</div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
